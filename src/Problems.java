@@ -1,8 +1,11 @@
 import java.awt.List;
+import java.io.File;
+import java.io.FileNotFoundException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.Map;
+import java.util.Scanner;
 import java.util.Set;
 import java.util.TreeMap;
 import java.util.TreeSet;
@@ -91,43 +94,134 @@ public class Problems {
 	public void p6() {
 		int sum = 0;
 		int square = 0;
-		for(int i = 1; i<=100; i++){
-			sum+=i*i;
-			square+=i;
+		for (int i = 1; i <= 100; i++) {
+			sum += i * i;
+			square += i;
 		}
-		square*=square;
-		System.out.println(square-sum);
+		square *= square;
+		System.out.println(square - sum);
 	}
 
-	public boolean isPrime(int k){
-		if(k%2 == 0)
+	public boolean isPrime(int k) {
+		if (k == 1)
 			return false;
-		for(int i = 3; i*i<=k; i+=2){
-			if(k%i == 0)
+		if (k == 2)
+			return true;
+		if (k % 2 == 0)
+			return false;
+		for (int i = 3; i * i <= k; i += 2) {
+			if (k % i == 0)
 				return false;
 		}
 		return true;
 	}
-	
+
 	public void p7() {
 		ArrayList<Integer> ans = new ArrayList<Integer>();
 		int i = 0;
-		while(ans.size()<=10000){
-			if(isPrime(i))
+		while (ans.size() <= 10000) {
+			if (isPrime(i))
 				ans.add(i);
 			i++;
 		}
 		System.out.println(ans.get(10000));
 	}
-	
+
+	public void p8() {
+		ArrayList<Long> ans = new ArrayList<Long>();
+		long temp = 0;
+		long max = 0;
+		try {
+			Scanner scan = new Scanner(new File("p8.txt"));
+			while (scan.hasNextLine()) {
+				String line = scan.nextLine();
+				for (int i = 0; i < line.length(); i++)
+					ans.add((long) Integer.parseInt(Character.toString(line.charAt(i))));
+			}
+			scan.close();
+		} catch (FileNotFoundException e) {
+			e.printStackTrace();
+		}
+		for (int i = 0; i < ans.size() - 12; i++) {
+			temp = ans.get(i) * ans.get(i + 1) * ans.get(i + 2) * ans.get(i + 3) * ans.get(i + 4) * ans.get(i + 5)
+					* ans.get(i + 6) * ans.get(i + 7) * ans.get(i + 8) * ans.get(i + 9) * ans.get(i + 10)
+					* ans.get(i + 11) * ans.get(i + 12);
+			if (temp >= max)
+				max = temp;
+		}
+		System.out.println(max);
+	}
+
+	public void p9() {
+		for (int i = 1000; i > 0; i--) {
+			for (int k = 1000 - i; k > 0; k--) {
+				int j = 1000 - i - k;
+				if (i * i + k * k - j * j == 0) {
+					System.out.println(i * j * k);
+					return;
+				}
+			}
+		}
+	}
+
+	public void p10() {
+		long sum = 0;
+		for (int i = 1; i < 2000000; i++) {
+			if (isPrime(i)) {
+				sum += i;
+			}
+		}
+		System.out.println(sum);
+	}
+
+	public void p11() {
+		ArrayList<Long> ans = new ArrayList<Long>();
+		long max = 0;
+		try {
+			Scanner scan = new Scanner(new File("p11.txt"));
+			while (scan.hasNextLong())
+				ans.add(scan.nextLong());
+			scan.close();
+		} catch (FileNotFoundException e) {
+			e.printStackTrace();
+		}
+		for (int i = 0; i < ans.size(); i++) {
+			long down = 0;
+			long right = 0;
+			long diaBR = 0;
+			long diaTR = 0;
+			if (i + 60 <= 399)
+				down = ans.get(i) * ans.get(i + 20) * ans.get(i + 40) * ans.get(i + 60);
+			if ((i + 4) % 20 >= i % 20)
+				right = ans.get(i) * ans.get(i + 1) * ans.get(i + 2) * ans.get(i + 3);
+			if (i + 63 <= 399 & (i + 4) % 20 >= i % 20)
+				diaBR = ans.get(i) * ans.get(i + 21) * ans.get(i + 42) * ans.get(i + 63);
+			if (i <= 396 & (i + 4) % 20 >= i % 20 & i >= 76)
+				diaTR = ans.get(i) * ans.get(i - 19) * ans.get(i - 38) * ans.get(i - 57);
+			if (down > max)
+				max = down;
+			if (right > max)
+				max = right;
+			if (diaBR > max)
+				max = diaBR;
+			if (diaTR > max)
+				max = diaTR;
+		}
+		System.out.println(max);
+	}
+
 	public static void main(String[] args) {
 		Problems prob = new Problems();
-		prob.p1();
-		prob.p2();
-		prob.p3(600851475143L);
-		prob.p4();
-		prob.p5();
-		prob.p6();
-		prob.p7();
+		// prob.p1();
+		// prob.p2();
+		// prob.p3(600851475143L);
+		// prob.p4();
+		// prob.p5();
+		// prob.p6();
+		// prob.p7();
+		// prob.p8();
+		// prob.p9();
+		// prob.p10();
+		prob.p11();
 	}
 }
