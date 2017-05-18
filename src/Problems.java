@@ -116,6 +116,20 @@ public class Problems {
 		return true;
 	}
 
+	public boolean isPrime(long k) {
+		if (k == 1)
+			return false;
+		if (k == 2)
+			return true;
+		if (k % 2 == 0)
+			return false;
+		for (int i = 3; i * i <= k; i += 2) {
+			if (k % i == 0)
+				return false;
+		}
+		return true;
+	}
+
 	public void p7() {
 		ArrayList<Integer> ans = new ArrayList<Integer>();
 		int i = 0;
@@ -210,18 +224,124 @@ public class Problems {
 		System.out.println(max);
 	}
 
+	public TreeSet<Long> getFactors(long k) {
+		TreeSet<Long> ans = new TreeSet<Long>();
+		for (long i = (int) k / 2 + 1; i > 0; i--)
+			if (k % i == 0)
+				ans.add(i);
+		ans.add(k);
+		return ans;
+	}
+
+	public long getDivNum(long k) {
+		long ans = 0;
+		int i = 2;
+		for (i = 2; i * i <= k; i++) {
+			if (k % i == 0) {
+				ans++;
+			}
+		}
+		i--;
+		if (i * i == k)
+			return 2 * ans + 1;
+		return 2 * ans + 2;
+	}
+
+	public void p12() {
+		long Tri = 0;
+		long i = 1;
+		while (true) {
+			Tri += i;
+			if (getDivNum(Tri) > 500)
+				break;
+			i++;
+		}
+		System.out.println(Tri);
+	}
+
+	public int intCarry(int k) {
+		String temp = Integer.toString(k);
+		if (temp.length() == 1)
+			return 0;
+		return Integer.valueOf(temp.substring(0, temp.length() - 1));
+	}
+
+	public String strLast(int k) {
+		String temp = Integer.toString(k);
+		return Character.toString(temp.charAt(temp.length() - 1));
+	}
+
+	public void p13() {
+		StringBuilder sb = new StringBuilder();
+		String[] nums = new String[100];
+		int tempsum = 0;
+		try {
+			Scanner scan = new Scanner(new File("p13.txt"));
+			for (int i = 0; i < 100; i++) {
+				nums[i] = scan.nextLine();
+			}
+			scan.close();
+		} catch (FileNotFoundException e) {
+			e.printStackTrace();
+		}
+		for (int charnum = 49; charnum >= 0; charnum--) {
+			tempsum = intCarry(tempsum);
+			for (int strline = 0; strline < 100; strline++) {
+				tempsum += Integer.valueOf(Character.toString(nums[strline].charAt(charnum)));
+			}
+			if (charnum == 0) {
+				;
+				sb.append(new StringBuilder(Integer.toString(tempsum)).reverse().toString());
+				break;
+			}
+			sb.append(strLast(tempsum));
+
+		}
+		System.out.println(sb.reverse().toString().substring(0, 10));
+	}
+
+	public long getCollatzLength(long k) {
+		long count = 1;
+		while (k != 1) {
+			if (k % 2 == 0) {
+				k /= 2;
+			} else {
+				k = 3 * k + 1;
+			}
+			count++;
+		}
+		return count;
+	}
+
+	public void p14() {
+		long length = 0;
+		long maxnum = 0;
+		for (long i = 1; i < 1000000; i++)
+			if (getCollatzLength(i) > length) {
+				length = getCollatzLength(i);
+				maxnum = i;
+			}
+		System.out.print(maxnum);
+	}
+
+	public void p15(int n) {
+		long[] ans = new long[n];
+		Arrays.fill(ans, 1);
+		for (int i = 0; i < n; i++) {
+			for (int j = 0; j < i; j++) {
+				if (j == 0)
+					ans[j] = ans[j] + ans[n-1];
+				else ans[j] = ans[j] + ans[j - 1];
+			}
+			if (i == 0)
+				ans[i] = 2 * ans[n-1];
+			else ans[i] = 2 * ans[i - 1];
+		}
+		System.out.println(ans[n - 1]);
+	}
+
 	public static void main(String[] args) {
 		Problems prob = new Problems();
-		// prob.p1();
-		// prob.p2();
-		// prob.p3(600851475143L);
-		// prob.p4();
-		// prob.p5();
-		// prob.p6();
-		// prob.p7();
-		// prob.p8();
-		// prob.p9();
-		// prob.p10();
-		prob.p11();
+		prob.p15(20);
 	}
 }
