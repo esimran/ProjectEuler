@@ -1,6 +1,7 @@
 import java.awt.List;
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
@@ -340,8 +341,37 @@ public class Problems {
 		System.out.println(ans[n - 1]);
 	}
 
+	public void p16() {
+		int ans = 0;
+		BigDecimal num = new BigDecimal(Math.pow(2, 1000));
+		for(char c: num.toString().toCharArray())
+			ans+=Integer.valueOf(Character.toString(c));
+		System.out.print(ans);
+	}
+	
+	public void p17() {
+		//90*single digits + 10*teen digits + 100*(twenty, thirty, forty, etc.) 900*hundred +100*single digits+99*9 and one thousand
+		long ans = 0;
+		int[] single = {3, 3, 5, 4, 4, 3, 5, 5, 4};
+		int[] weird = {3, 6, 6, 8, 8, 7, 7, 9, 8, 8};
+		int[] tens = {6, 6, 5, 5, 5, 7, 6, 6};
+		for(int i = 0; i<single.length; i++){
+			ans+=190*single[i];
+		}
+		for(int i = 0; i<weird.length; i++){
+			ans+=10*weird[i];
+		}
+		for(int i = 0; i<tens.length; i++){
+			ans+=100*tens[i];
+		}
+		ans+=900*7;
+		ans+=99*9*3;
+		ans+=3+8;
+		System.out.println(ans);
+	}
+	
 	public static void main(String[] args) {
 		Problems prob = new Problems();
-		prob.p15(20);
+		prob.p17();
 	}
 }
