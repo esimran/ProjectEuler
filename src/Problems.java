@@ -1,6 +1,7 @@
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.math.BigDecimal;
+import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
@@ -8,7 +9,7 @@ import java.util.Scanner;
 import java.util.TreeSet;
 
 public class Problems {
-	
+
 	public void p1() {
 		int sum = 0;
 		for (int i = 0; i < 1000; i++) {
@@ -395,38 +396,143 @@ public class Problems {
 		}
 		System.out.println(maxPath(0, 0, record));
 	}
-	
+
 	public void p19() {
 		TreeSet<Integer> months = new TreeSet<Integer>();
 		TreeSet<Integer> sundays = new TreeSet<Integer>();
-		int[] days = {31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31};
+		int[] days = { 31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31 };
 		int day = 0;
 		int count = 0;
 		months.add(day);
-		while(count<99){
-			if(count % 4 == 3){
+		while (count < 99) {
+			if (count % 4 == 3) {
 				days[1] = 29;
-			} else days[1] = 28;
-			for(int i = 0; i<days.length; i++){
-				day+=days[i];
+			} else
+				days[1] = 28;
+			for (int i = 0; i < days.length; i++) {
+				day += days[i];
 				months.add(day);
-			}			
+			}
 			count++;
 		}
-		for(int i = 6; i<=day; i+=7){
+		for (int i = 6; i <= day; i += 7) {
 			sundays.add(i);
 		}
 		sundays.retainAll(months);
 		System.out.println(sundays.size());
 	}
 
-	public void p20() {
-		System.out.println("TODO");
+	public BigInteger factorial(BigInteger n) {
+		if (n.toString().equals("1")) {
+			return new BigInteger("1");
+		}
+		return factorial(n.subtract(new BigInteger("1"))).multiply(new BigInteger(n.toString()));
 	}
 
-	
+	public void p20() {
+		BigInteger num = factorial(new BigInteger("100"));
+		long ans = 0;
+		for (char c : num.toString().toCharArray()) {
+			ans += Integer.valueOf(Character.toString(c));
+		}
+		System.out.println(ans);
+	}
+
+	public long getFactorSum(long n) {
+		TreeSet<Long> temp = getFactors(n);
+		long sum = 0;
+		for (Long l : temp) {
+			sum += l;
+		}
+		return sum - n;
+	}
+
+	// public void p21() {
+	// int num = 10000;
+	// long[] myCache = new long[num];
+	// Arrays.fill(myCache, -1);
+	// long val;
+	// long ans = 0;
+	// for (int i = 1; i < num; i++) {
+	// if (myCache[i] != -1) {
+	// val = myCache[i];
+	// } else {
+	// val = getFactorSum(i);
+	// if (val < num)
+	// myCache[i] = val;
+	// }
+	// long valSum;
+	// if (val < num && myCache[(int) val] == -1) {
+	// valSum = getFactorSum(val);
+	// if (valSum < num) {
+	// myCache[(int) val] = valSum;
+	// }
+	// } else if(val<num){
+	// valSum = myCache[(int) val];
+	// } else valSum = -1;
+	// if(valSum != -1 && valSum == i){
+	// ans+=i;
+	// }
+	//// System.out.println(val);
+	//// System.out.println(valSum);
+	// }
+	// System.out.println(getFactorSum(284));
+	// System.out.println(getFactorSum(220));
+	//// for(int i = 0; i<num; i++){
+	//// System.out.println(myCache[i]);
+	//// }
+	// System.out.println(ans);
+	// }
+
+	public void p21() {
+		int num = 10000;
+		long[] myCache = new long[num];
+		Arrays.fill(myCache, -1);
+		long val;
+		long ans = 0;
+		for (int i = 1; i < num; i++) {
+			val = getFactorSum(i);
+			if (val < num)
+				myCache[i] = val;
+		}
+		for (int a = 1; a < num; a++) {
+			long b = myCache[a];
+			if (b == -1)
+				continue;
+			if (myCache[(int) b] == a && a != b) {
+				ans += a;
+			}
+		}
+		System.out.println(ans);
+	}
+
+	public long numericSumOfString(String s) {
+		long ans = 0;
+		for (char c : s.toCharArray())
+			ans += c - 64;
+		return ans;
+	}
+
+	public void p22() {
+		Scanner text;
+		String names = "";
+		long ans = 0;
+		try {
+			text = new Scanner(new File("p22.txt"));
+			names = text.nextLine();
+		} catch (FileNotFoundException e) {
+			e.printStackTrace();
+		}
+		names = names.replaceAll("\"", "");
+		String[] val = names.split(",");
+		Arrays.sort(val);
+		for (long i = 0; i < val.length; i++)
+			ans += numericSumOfString(val[(int) i]) * (i+1);
+		System.out.println(ans);
+	}
+
 	public static void main(String[] args) {
 		Problems prob = new Problems();
-		prob.p20();
+		prob.p22();
 	}
 }
