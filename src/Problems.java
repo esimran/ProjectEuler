@@ -1,18 +1,14 @@
-import java.awt.List;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
-import java.util.Map;
 import java.util.Scanner;
-import java.util.Set;
-import java.util.TreeMap;
 import java.util.TreeSet;
 
 public class Problems {
-
+	
 	public void p1() {
 		int sum = 0;
 		for (int i = 0; i < 1000; i++) {
@@ -331,12 +327,14 @@ public class Problems {
 		for (int i = 0; i < n; i++) {
 			for (int j = 0; j < i; j++) {
 				if (j == 0)
-					ans[j] = ans[j] + ans[n-1];
-				else ans[j] = ans[j] + ans[j - 1];
+					ans[j] = ans[j] + ans[n - 1];
+				else
+					ans[j] = ans[j] + ans[j - 1];
 			}
 			if (i == 0)
-				ans[i] = 2 * ans[n-1];
-			else ans[i] = 2 * ans[i - 1];
+				ans[i] = 2 * ans[n - 1];
+			else
+				ans[i] = 2 * ans[i - 1];
 		}
 		System.out.println(ans[n - 1]);
 	}
@@ -344,34 +342,91 @@ public class Problems {
 	public void p16() {
 		int ans = 0;
 		BigDecimal num = new BigDecimal(Math.pow(2, 1000));
-		for(char c: num.toString().toCharArray())
-			ans+=Integer.valueOf(Character.toString(c));
+		for (char c : num.toString().toCharArray())
+			ans += Integer.valueOf(Character.toString(c));
 		System.out.print(ans);
 	}
-	
+
 	public void p17() {
-		//90*single digits + 10*teen digits + 100*(twenty, thirty, forty, etc.) 900*hundred +100*single digits+99*9 and one thousand
 		long ans = 0;
-		int[] single = {3, 3, 5, 4, 4, 3, 5, 5, 4};
-		int[] weird = {3, 6, 6, 8, 8, 7, 7, 9, 8, 8};
-		int[] tens = {6, 6, 5, 5, 5, 7, 6, 6};
-		for(int i = 0; i<single.length; i++){
-			ans+=190*single[i];
+		int[] single = { 3, 3, 5, 4, 4, 3, 5, 5, 4 };
+		int[] weird = { 3, 6, 6, 8, 8, 7, 7, 9, 8, 8 };
+		int[] tens = { 6, 6, 5, 5, 5, 7, 6, 6 };
+		for (int i = 0; i < single.length; i++) {
+			ans += 190 * single[i];
 		}
-		for(int i = 0; i<weird.length; i++){
-			ans+=10*weird[i];
+		for (int i = 0; i < weird.length; i++) {
+			ans += 10 * weird[i];
 		}
-		for(int i = 0; i<tens.length; i++){
-			ans+=100*tens[i];
+		for (int i = 0; i < tens.length; i++) {
+			ans += 100 * tens[i];
 		}
-		ans+=900*7;
-		ans+=99*9*3;
-		ans+=3+8;
+		ans += 900 * 7;
+		ans += 99 * 9 * 3;
+		ans += 3 + 8;
 		System.out.println(ans);
 	}
+
+	public int maxPath(int row, int col, ArrayList<ArrayList<Integer>> record) {
+		int current = record.get(row).get(col);
+		if (row == record.size() - 1) {
+			return current;
+		}
+		return current + Math.max(maxPath(row + 1, col, record), maxPath(row + 1, col + 1, record));
+	}
+
+	public void p18() {
+		ArrayList<ArrayList<Integer>> record = new ArrayList<ArrayList<Integer>>();
+		Scanner text;
+		try {
+			text = new Scanner(new File("p18.txt"));
+			Scanner line;
+			while (text.hasNextLine()) {
+				line = new Scanner(text.nextLine());
+				ArrayList<Integer> temp = new ArrayList<Integer>();
+				while (line.hasNextInt()) {
+					temp.add(line.nextInt());
+				}
+				record.add(temp);
+			}
+			text.close();
+		} catch (FileNotFoundException e) {
+			e.printStackTrace();
+		}
+		System.out.println(maxPath(0, 0, record));
+	}
+	
+	public void p19() {
+		TreeSet<Integer> months = new TreeSet<Integer>();
+		TreeSet<Integer> sundays = new TreeSet<Integer>();
+		int[] days = {31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31};
+		int day = 0;
+		int count = 0;
+		months.add(day);
+		while(count<99){
+			if(count % 4 == 3){
+				days[1] = 29;
+			} else days[1] = 28;
+			for(int i = 0; i<days.length; i++){
+				day+=days[i];
+				months.add(day);
+			}			
+			count++;
+		}
+		for(int i = 6; i<=day; i+=7){
+			sundays.add(i);
+		}
+		sundays.retainAll(months);
+		System.out.println(sundays.size());
+	}
+
+	public void p20() {
+		System.out.println("TODO");
+	}
+
 	
 	public static void main(String[] args) {
 		Problems prob = new Problems();
-		prob.p17();
+		prob.p20();
 	}
 }
